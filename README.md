@@ -12,12 +12,17 @@ Php extension to transform any non-latin characters to its equivalent in latin
 
 * $ make
 
+# Test
+
+* $ make test
 
 # Install
 
 * copy the file unidecode.so (in the ./modules folder) to your extension folder (ex: /usr/lib/php5/20090626/)
 
 * add the extension to php by adding the line extension=unidecode.so in your php.ini
+
+
 
 
 # Usage
