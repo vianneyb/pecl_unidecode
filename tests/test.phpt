@@ -40,14 +40,14 @@ foreach ($test as $t) {
 >>VIAIIIeY=<<
 >>[?]!aNSNS`g<<
 >>GiLhhPSY=<<
->>EURIeOxO<<
+>>EUIeOxO<<
 >>12345<<
 >>Ying Shi Ma <<
 >>C'est deja l'ete.<<
 >>Nin hao. Wo shi zhong guo ren<<
 >>Komp'iuter<<
 >>jaja---lol-mememeoo--a<<
->>dollar $ euro EUR livre PS Y E | O E a Z i n<<
+>>dollar $ euro EU livre PS Y E | O E a Z i n<<
 >>___This is a test ---<<
 >>1 2 3<<
 >>uber<<
