@@ -1,3 +1,7 @@
+/**
+ * from https://github.com/iki/unidecode
+ */
+
 char mapping_chars[] = "\
 \x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !\"#$\%&'()*+,-./0123456789:;<=>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ]\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ !C/PS$\?Y=|SS\"(c)a<<!(r)-deg+-23'uP*,1o>>1/41/23/4\?AAAAAAAECEEEEIIIIDNOOOOOxOUUUUYThssaaaaaaaeceeeeiiiidnooooo/ouuuuythy\
 AaAaAaCcCcCcCcDdDdEeEeEeEeEeGgGgGgGgHhHhIiIiIiIiIiIJijJjKkkLlLlLlLlLlNnNnNn'nngNGOoOoOoOEoeRrRrRrSsSsSsSsTtTtTtUuUuUuUuUuUuWwYyYZzZzZzsbBBb66OCcDDDdd3@EFfGGhvIIKkllWNnOOoOIoiPpYR22SHshtTtTUuYVYyZzZHZHzhzh255tsw||||=!DZDzdzLJLjljNJNjnjAaIiOoUuUuUuUuUu@AaAaAEaeGgGgKkOoOoZHzhjDZDzdzGgHVWNnAaAEaeOo\

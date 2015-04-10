@@ -33,3 +33,11 @@ Php extension to transform any non-latin characters to its equivalent in latin
 
 * I made this extension because i needed a perfomant and customizable way of transliterate non latin characters. Since i didn't
 find something useful (or complete) around the web or Pecl, i made my own.
+
+
+
+# Copyright
+
+* Adaptation from the work of Alexander Kuznetsov <alexkuz@gmail.com> (http://pgxn.org/dist/unidecode/0.0.5/)
+
+* Original transliteration table from Python unidecode library (https://github.com/iki/unidecode)

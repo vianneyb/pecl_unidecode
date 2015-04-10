@@ -1,16 +1,38 @@
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2010 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.0 of the PHP license,        |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:              |
+  | http://www.php.net/license/3_0.txt.                                                 |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.            |
+  +----------------------------------------------------------------------+
+  | Author: Vianney Briois <vianney@evaneos.com>                         |
+  +----------------------------------------------------------------------+
+
+  // from the work of Alexander Kuznetsov <alexkuz@gmail.com>
+*/
+
+
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
-#include <stdio.h>
+
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
 
 #include "php_unidecode.h"
-#include "data/mapping.c"
+#include "data/mapping.h"
 
 
 
@@ -43,8 +65,7 @@ static int ordFromUtf8(uint8_t buf[], unsigned long *idx, ZPP_STRLEN_TYPE str_le
 		return -1;
 	}
 	nxt = buf[(*idx)++];
-	// printf("next : %u\n",nxt);
-	// printf("next&80 : %u \n",nxt&80);
+
 	if (nxt & 0x80) {
 		msk = 0xe0;
 		for (remunits = 1; (nxt & msk) != ((msk << 1) & 0xff); ++remunits) {
@@ -129,24 +150,20 @@ PHP_FUNCTION(unidecode)
 {
 	char *src;
 	int src_len;
+	ZPP_STRLEN_TYPE dst_len, src_uni_len;
+	char* dst;
+	int n = 0, start, end, i, res;
+	uint32_t c, *src_uni, nb_char;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &src, &src_len) == FAILURE) {
-		RETURN_NULL();
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "We need a string parameter.\n");
+		return;
 	}
-
 	if (!src_len) {
 		RETURN_EMPTY_STRING();
 	}
 
-
-	ZPP_STRLEN_TYPE dst_len;
-	char* dst;
-
-	ZPP_STRLEN_TYPE src_uni_len = (src_len + 1) * 4;
-
-	int n = 0, start, end, i, res;
-	uint32_t c, *src_uni, nb_char;
-
+	src_uni_len = (src_len + 1) * 4;
 	nb_char = sizeof(mapping_index) / sizeof(mapping_index[0]);
 
 	// allocate enough space to write the new string in 32
@@ -155,13 +172,35 @@ PHP_FUNCTION(unidecode)
 	// each char is replaced by its 32bit value
 	res = utf8_to_utf32((uint8_t*)src, src_uni, src_len, &src_uni_len);
 
-
 	if (res == -1) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "The string in parameter seems to not be a valid string.\n");
+		efree(src_uni);
 		RETURN_NULL();
 	}
-	// alloc more space than needed absolutely
-	dst = emalloc(src_uni_len * 8 + 1);
 
+
+	for (i = 0; i < src_uni_len; ++i) {
+		c = src_uni[i];
+		if (c >= nb_char) {
+			n++;
+			continue;
+		}
+		start = mapping_index[c];
+		if (c == nb_char - 1) {
+			end = start + 1;
+		} else {
+			end = mapping_index[c + 1];
+		}
+		if (!start) {
+			continue;
+		}
+		n += end - start;
+	}
+	dst_len = n;
+
+	dst = emalloc(dst_len);
+
+	n=0;
 	for (i = 0; i < src_uni_len; ++i) {
 		c = src_uni[i];
 
@@ -188,14 +227,7 @@ PHP_FUNCTION(unidecode)
 	}
 	//terminate the string
 	*(dst + n) = 0;
-	// printf("%u\n", *(dst + n));
-
 	efree(src_uni);
-
-	dst_len = n;
-
-
-
 
 
 	RETURN_STRING(dst, 1);
